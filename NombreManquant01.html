@@ -1,0 +1,156 @@
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    body {
+      font-family: Comic Sans MS, cursive, sans-serif;
+      background: linear-gradient(to top left, #ffffff, #ffffff);
+      text-align: center;
+      padding: 40px;
+    }
+    .game-box {
+      background: #fff3cd;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+      max-width: 450px;
+      margin: auto;
+      border: 4px dashed #f8c146;
+    }
+    h1 {
+      font-size: 26px;
+      color: #d35400;
+    }
+    .equation {
+      font-size: 36px;
+      margin: 20px 0;
+      color: #2c3e50;
+    }
+    input[type="number"] {
+      font-size: 30px;
+      width: 80px;
+      text-align: center;
+      margin: 0 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .score, .timer, .level-select {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+    select {
+      padding: 5px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    #replayBtn {
+      display: none;
+      background-color: #2980b9;
+    }
+  </style>
+  <div class="game-box">
+    <h1>Jeu du nombre manquant 🎯</h1>
+    <div class="level-select">
+      Niveau :
+      <select id="level" fdprocessedid="lhu9d" onchange="restartGame()">
+        <option value="easy">Facile (1-10)</option>
+        <option value="medium">Moyen (1-20)</option>
+        <option value="hard">Difficile (1-50)</option>
+      </select>
+    </div>
+    <div class="timer">⏱ Temps restant : <span id="time">60</span>s</div>
+    <div class="score">🎯 Score : <span id="score">0</span></div>
+    <div class="equation" id="equation">__ + 4 = 7</div>
+    <input type="number" id="missingNumber" placeholder="?" fdprocessedid="ublz5q">
+    <br>
+    <button fdprocessedid="yw1xl9" onclick="checkMissing()">Valider</button>
+    <div class="result" id="result"></div>
+    <button id="replayBtn" fdprocessedid="b12pe5" onclick="restartGame()">Rejouer</button>
+  </div>
+  <script>
+    let num1, num2, missing, position;
+    let score = 0;
+    let timeLeft = 60;
+    let timer;
+    let level = "easy";
+    function getMaxNumber() {
+      switch (level) {
+        case "easy": return 10;
+        case "medium": return 20;
+        case "hard": return 50;
+      }
+    }
+    function generateEquation() {
+      const max = getMaxNumber();
+      num1 = Math.floor(Math.random() * max);
+      num2 = Math.floor(Math.random() * max);
+      let sum = num1 + num2;
+      position = Math.random() < 0.5 ? "left" : "right";
+      if (position === "left") {
+        missing = num1;
+        document.getElementById("equation").textContent = `__ + ${num2} = ${sum}`;
+      } else {
+        missing = num2;
+        document.getElementById("equation").textContent = `${num1} + __ = ${sum}`;
+      }
+      document.getElementById("missingNumber").value = "";
+      document.getElementById("result").textContent = "";
+    }
+    function checkMissing() {
+      const userAnswer = parseInt(document.getElementById("missingNumber").value);
+      const result = document.getElementById("result");
+      if (userAnswer === missing) {
+        score++;
+        document.getElementById("score").textContent = score;
+        result.textContent = "Bravo ! 🎉";
+        result.style.color = "green";
+        setTimeout(generateEquation, 700);
+      } else {
+        result.textContent = "Essaie encore ! ❌";
+        result.style.color = "red";
+      }
+    }
+    function startTimer() {
+      timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("time").textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          endGame();
+        }
+      }, 1000);
+    }
+    function endGame() {
+      document.getElementById("equation").textContent = "Temps écoulé ! ⌛";
+      document.getElementById("result").textContent = `Ton score final est de ${score} points.`;
+      document.getElementById("result").style.color = "#000";
+      document.getElementById("replayBtn").style.display = "inline-block";
+    }
+    function restartGame() {
+      level = document.getElementById("level").value;
+      score = 0;
+      timeLeft = 60;
+      document.getElementById("score").textContent = score;
+      document.getElementById("time").textContent = timeLeft;
+      document.getElementById("replayBtn").style.display = "none";
+      clearInterval(timer);
+      generateEquation();
+      startTimer();
+    }
+    // Démarrage initial
+    restartGame();
+  </script>
