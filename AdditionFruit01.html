@@ -1,37 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Apprendre à additionner 🍎</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom right, #fffde7, #f0f4c3);
       text-align: center;
       padding: 40px;
+      margin: 0;
     }
+
+    h1 {
+      font-size: 36px;
+      color: #d35400;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px #f7dc6f;
+    }
+
+    .app-container {
+      background-color: #fffbe6;
+      padding: 35px;
+      border-radius: 25px;
+      display: inline-block;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      max-width: 500px;
+      width: 90%;
+    }
+
     .section {
-      margin: 20px 0;
+      margin: 25px 0;
     }
+
+    label {
+      font-size: 20px;
+      color: #34495e;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 2px solid #f39c12;
+      background-color: #fff8dc;
+      transition: border-color 0.3s;
+    }
+
+    select:hover {
+      border-color: #d35400;
+    }
+
     input[type=range] {
-      width: 200px;
+      width: 70%;
+      accent-color: #f39c12;
     }
+
     .fruit-display {
-      font-size: 30px;
+      font-size: 36px;
       margin-top: 20px;
+      line-height: 1.5;
     }
+
     #resultat {
       margin-top: 30px;
       font-size: 24px;
+      color: #2c3e50;
+      background: #fef9e7;
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px dashed #f39c12;
+      transition: all 0.3s ease-in-out;
     }
-    .app-container {
-      background-color: #fff8dc; /* Vert clair */
-      padding: 30px;
-      border-radius: 10px;
-      display: inline-block;
+
+    button {
+      padding: 12px 30px;
+      font-size: 20px;
+      background-color: #f39c12;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #e67e22;
+      transform: scale(1.05);
+    }
+
+    span {
+      font-weight: bold;
     }
   </style>
+</head>
+<body>
+
   <h1>🍇🍎 Apprendre à additionner</h1>
   <div class="app-container">
     <div class="section">
       <label for="fruit1">Choisis le premier fruit :</label>
-      <select id="fruit1" fdprocessedid="wng9rp" onchange="majSliders()">
+      <select id="fruit1" onchange="majSliders()">
         <option value="🍎">Pomme 🍎</option>
         <option value="🍊">Orange 🍊</option>
         <option value="🍌">Banane 🍌</option>
@@ -39,9 +110,10 @@
         <option value="🍇">Raisin 🍇</option>
       </select>
     </div>
+
     <div class="section">
       <label for="fruit2">Choisis le deuxième fruit :</label>
-      <select id="fruit2" fdprocessedid="6v2ju" onchange="majSliders()">
+      <select id="fruit2" onchange="majSliders()">
         <option value="🍊">Orange 🍊</option>
         <option value="🍎">Pomme 🍎</option>
         <option value="🍌">Banane 🍌</option>
@@ -49,28 +121,35 @@
         <option value="🍇">Raisin 🍇</option>
       </select>
     </div>
+
     <div class="section">
       <label for="slider1">Nombre de <span id="labelFruit1">🍎</span> : <span id="valFruit1">0</span></label><br>
       <input type="range" id="slider1" min="0" max="10" value="0" oninput="majAffichage('slider1', 'valFruit1')">
     </div>
+
     <div class="section">
       <label for="slider2">Nombre de <span id="labelFruit2">🍊</span> : <span id="valFruit2">0</span></label><br>
       <input type="range" id="slider2" min="0" max="10" value="0" oninput="majAffichage('slider2', 'valFruit2')">
     </div>
-    <button fdprocessedid="oyhg49" onclick="additionnerFruits()">Additionner les fruits</button>
+
+    <button onclick="additionnerFruits()">🍒 Additionner les fruits</button>
+
     <div id="resultat"></div>
   </div>
+
   <script>
     function majSliders() {
       const fruit1 = document.getElementById("fruit1").value;
       const fruit2 = document.getElementById("fruit2").value;
       document.getElementById("labelFruit1").innerText = fruit1;
       document.getElementById("labelFruit2").innerText = fruit2;
-      additionnerFruits(); // Met à jour l'affichage automatiquement
+      additionnerFruits();
     }
+
     function majAffichage(sliderId, spanId) {
       document.getElementById(spanId).innerText = document.getElementById(sliderId).value;
     }
+
     function additionnerFruits() {
       const fruit1 = document.getElementById("fruit1").value;
       const fruit2 = document.getElementById("fruit2").value;
@@ -78,9 +157,13 @@
       const nb2 = parseInt(document.getElementById("slider2").value);
       const total = nb1 + nb2;
       const affichage = fruit1.repeat(nb1) + " " + fruit2.repeat(nb2);
+      document.getElementById("valFruit1").innerText = nb1;
+      document.getElementById("valFruit2").innerText = nb2;
       document.getElementById("resultat").innerHTML =
-        `🧮 Total de fruits : ${total}<br><div class="fruit-display">${affichage}</div>`;
+        `🧮 <strong>Total de fruits :</strong> ${total}<br><div class="fruit-display">${affichage}</div>`;
     }
-    // Initialiser les labels au chargement
+
     window.onload = majSliders;
   </script>
+</body>
+</html>

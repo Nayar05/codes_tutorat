@@ -1,43 +1,91 @@
- 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Jeu du mot manquant 🧠</title>
   <style>
-    
+    html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #fff9c4, #ffe082);
+}
+
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom right, #fff9c4, #ffe082);
+      text-align: center;
+      padding: 40px;
+      margin: 0;
+    }
+
     h1 {
+      font-size: 32px;
       color: #ff6f00;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 0 #fff;
     }
+
     #phrase {
-      font-size: 24px;
-      margin: 20px;
+      font-size: 26px;
+      margin: 30px 0;
+      color: #3e2723;
     }
+
     .choix {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
-      margin: 20px;
-      flex-wrap: wrap;
+      margin: 20px 0;
     }
+
     .option {
-      padding: 12px 20px;
-      font-size: 18px;
-      background-color: #ffe082;
-      border: none;
-      border-radius: 10px;
+      padding: 14px 28px;
+      font-size: 20px;
+      background-color: #ffecb3;
+      border: 2px solid #ffa000;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
     }
+
     .option:hover {
       background-color: #ffd54f;
+      transform: scale(1.05);
     }
+
     #message {
-      font-size: 22px;
-      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 30px;
+      padding: 15px;
+      border-radius: 10px;
+      display: inline-block;
+      min-width: 220px;
+    }
+
+    #message.green {
+      color: #2e7d32;
+      background-color: #c8e6c9;
+      border: 2px solid #2e7d32;
+    }
+
+    #message.red {
+      color: #c62828;
+      background-color: #ffcdd2;
+      border: 2px solid #c62828;
     }
   </style>
+</head>
+<body>
+
   <h1>🧠 Choisis le bon mot dans la phrase !</h1>
-  <div id="phrase"></div>
+  <div id="phrase">Chargement...</div>
   <div class="choix" id="choix"></div>
   <div id="message"></div>
+
   <script>
     const phrases = [
       { texte: "Le chat dort dans le _________", reponse: "lit", options: ["lit", "verre", "pain"] },
@@ -71,14 +119,19 @@
       { texte: "L’avion vole dans le _________", reponse: "ciel", options: ["ciel", "sol", "jardin"] },
       { texte: "Je me lave avec de l'_________", reponse: "eau", options: ["eau", "huile", "farine"] }
     ];
-    let phraseCourante = 0;
+
+    let phraseCourante = null;
+
     function afficherNouvellePhrase() {
       const data = phrases[Math.floor(Math.random() * phrases.length)];
       phraseCourante = data;
       document.getElementById("message").innerText = "";
+      document.getElementById("message").className = "";
       document.getElementById("phrase").innerText = data.texte;
+
       const zoneChoix = document.getElementById("choix");
       zoneChoix.innerHTML = "";
+
       data.options.forEach(option => {
         const btn = document.createElement("button");
         btn.className = "option";
@@ -87,17 +140,22 @@
         zoneChoix.appendChild(btn);
       });
     }
+
     function verifierReponse(choix) {
       const message = document.getElementById("message");
       if (choix === phraseCourante.reponse) {
         message.innerText = "🎉 Bravo !";
-        message.style.color = "green";
+        message.className = "green";
         setTimeout(afficherNouvellePhrase, 1500);
       } else {
         message.innerText = "❌ Essaie encore !";
-        message.style.color = "red";
+        message.className = "red";
       }
     }
-    // Lancement
+
+    // Lancement automatique
     afficherNouvellePhrase();
   </script>
+
+</body>
+</html>

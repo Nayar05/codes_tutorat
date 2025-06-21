@@ -1,10 +1,12 @@
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Glace à composer !</title>
   <style>
     body {
       font-family: 'Comic Sans MS', cursive;
-      background: linear-gradient(to bottom, #ffffff, #ffffff);
+      background: linear-gradient(to bottom, #fffde7, #fff8e1);
       text-align: center;
       margin: 0;
       padding: 0;
@@ -12,25 +14,19 @@
     h1 {
       color: #d81b60;
       margin-top: 30px;
-      font-size: 2em;
-      text-shadow: 1px 1px 2px #fff;
+      font-size: 2.4em;
+      text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.8);
     }
     #cone-wrapper {
       position: relative;
       width: 160px;
-      height: 350px;
+      height: 370px;
       margin: 30px auto;
     }
     #cone {
       width: 100px;
       height: 140px;
-      background: repeating-linear-gradient(
-        -45deg,
-        #e0a96d,
-        #e0a96d 10px,
-        #d8945c 10px,
-        #d8945c 20px
-      );
+      background: repeating-linear-gradient(-45deg, #e0a96d, #e0a96d 10px, #d8945c 10px, #d8945c 20px);
       clip-path: polygon(50% 100%, 0 0, 100% 0);
       position: absolute;
       bottom: 0;
@@ -39,17 +35,23 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
     .scoop {
-      width: 65px;
-      height: 65px;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
       position: absolute;
-      border: 3px solid #fff;
-      box-shadow: inset -2px -2px 5px rgba(0,0,0,0.1),
-                  3px 3px 7px rgba(0,0,0,0.15);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow:
+        inset -3px -3px 8px rgba(0, 0, 0, 0.1),
+        3px 3px 12px rgba(0, 0, 0, 0.25),
+        inset 0 0 12px rgba(255, 255, 255, 0.4);
       animation: bounceIn 0.6s ease;
       opacity: 0;
       animation-fill-mode: forwards;
       z-index: 2;
+      transition: transform 0.3s ease;
+    }
+    .scoop:hover {
+      transform: scale(1.05);
     }
     @keyframes bounceIn {
       0% {
@@ -97,15 +99,16 @@
     }
     #victoryModal {
       display: none;
-      position: fixed;
-      top: 50%;
+      position: absolute;
+      top: 35%;
       left: 50%;
       transform: translate(-50%, -50%);
       background: #fff;
       border: 5px solid #d81b60;
       padding: 30px;
       width: 90%;
-      max-width: 350px;
+      min-width: 400px;
+      max-width: 500px;
       border-radius: 20px;
       box-shadow: 0 0 25px rgba(0,0,0,0.4);
       z-index: 9999;
@@ -134,34 +137,37 @@
       background-color: #4caf50;
     }
   </style>
+</head>
+<body>
   <h1>🍦 Glace à composer ! 🍦</h1>
-  
   <div id="cone-wrapper">
     <div id="cone"></div>
+    <div id="victoryModal">
+      <h2>🎉 Bravo !</h2>
+      <p>Ta glace est magnifique et complète ! 🍒</p>
+      <button id="restartBtn" onclick="resetGame()">Recommencer</button>
+    </div>
   </div>
   <div id="game">
     <p id="question"></p>
-    <input type="number" id="answer" placeholder="Réponse" fdprocessedid="houg1q">
-    <button fdprocessedid="0c99gu" onclick="checkAnswer()">Valider</button>
+    <input type="number" id="answer" placeholder="Réponse">
+    <button onclick="checkAnswer()">Valider</button>
     <div class="message" id="message"></div>
   </div>
   <div id="overlay"></div>
-  <div id="victoryModal">
-    <h2>🎉 Bravo !</h2>
-    <p>Ta glace est magnifique et complète ! 🍒</p>
-    <button id="restartBtn" fdprocessedid="u06l1" onclick="resetGame()">Recommencer</button>
-  </div>
+
   <script>
     const colors = [
-      "linear-gradient(to bottom, #ff9a9e, #fad0c4)",
-      "linear-gradient(to bottom, #a1c4fd, #c2e9fb)",
-      "linear-gradient(to bottom, #fbc2eb, #a6c1ee)",
-      "linear-gradient(to bottom, #d4fc79, #96e6a1)",
-      "linear-gradient(to bottom, #ffecd2, #fcb69f)"
+      "radial-gradient(circle at 30% 30%, #ffb6b9, #ff5e62)",
+      "radial-gradient(circle at 30% 30%, #fbc2eb, #a6c1ee)",
+      "radial-gradient(circle at 30% 30%, #c2ffd8, #465e72)",
+      "radial-gradient(circle at 30% 30%, #ffecd2, #fcb69f)",
+      "radial-gradient(circle at 30% 30%, #fddb92, #d1fdff)"
     ];
     let scoops = 0;
     let correctAnswer = 0;
     let gameActive = true;
+
     function generateQuestion() {
       const a = Math.floor(Math.random() * 30) + 20;
       const b = Math.floor(Math.random() * 30) + 20;
@@ -170,33 +176,22 @@
       document.getElementById("answer").value = "";
       document.getElementById("message").innerText = "";
     }
+
     function addScoop() {
       const scoop = document.createElement("div");
       scoop.className = "scoop";
       scoop.style.background = colors[scoops % colors.length];
-      // Positionnement des 5 boules
-      switch (scoops) {
-        case 0:
-          scoop.style.bottom = "140px";
-          scoop.style.left = "10px";
-          break;
-        case 1:
-          scoop.style.bottom = "140px";
-          scoop.style.left = "85px";
-          break;
-        case 2:
-          scoop.style.bottom = "210px";
-          scoop.style.left = "10px";
-          break;
-        case 3:
-          scoop.style.bottom = "210px";
-          scoop.style.left = "85px";
-          break;
-        case 4:
-          scoop.style.bottom = "280px";
-          scoop.style.left = "48px";
-          break;
-      }
+
+      const positions = [
+        { bottom: "150px", left: "15px" },   // bas gauche
+        { bottom: "150px", left: "75px" },   // bas droite
+        { bottom: "220px", left: "15px" },   // haut gauche
+        { bottom: "220px", left: "75px" },   // haut droite
+        { bottom: "290px", left: "45px" }    // sommet
+      ];
+      scoop.style.bottom = positions[scoops].bottom;
+      scoop.style.left = positions[scoops].left;
+
       document.getElementById("cone-wrapper").appendChild(scoop);
       scoops++;
       if (scoops === 5) {
@@ -207,6 +202,7 @@
         }, 800);
       }
     }
+
     function checkAnswer() {
       if (!gameActive) return;
       const userAnswer = parseInt(document.getElementById("answer").value);
@@ -217,6 +213,7 @@
         document.getElementById("message").innerText = "Essaie encore 😅";
       }
     }
+
     function resetGame() {
       const wrapper = document.getElementById("cone-wrapper");
       document.querySelectorAll(".scoop").forEach(scoop => wrapper.removeChild(scoop));
@@ -226,5 +223,8 @@
       document.getElementById("overlay").style.display = "none";
       generateQuestion();
     }
+
     generateQuestion();
   </script>
+</body>
+</html>

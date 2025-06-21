@@ -4,30 +4,84 @@
   <meta charset="UTF-8">
   <title>Phrase à remettre en ordre</title>
   <style>
+    html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Comic Sans MS', cursive;
+  background: linear-gradient(to top left, #e3f2fd, #bbdefb);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+}
+
     body {
-      font-family: Arial, sans-serif;
-      background: #e3f2fd;
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(to top left, #e3f2fd, #bbdefb);
       text-align: center;
-      padding-top: 50px;
+      padding: 50px 20px;
     }
+
     h1 {
       color: #0d47a1;
+      font-size: 32px;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px white;
     }
+
     .mots {
-      margin-top: 20px;
+      margin: 20px auto;
+      max-width: 700px;
     }
+
     .mot {
       display: inline-block;
-      padding: 10px 15px;
-      margin: 5px;
-      background: #90caf9;
+      padding: 12px 18px;
+      margin: 8px;
+      background: #64b5f6;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 20px;
+      color: white;
+      font-weight: bold;
+      transition: transform 0.2s, background 0.3s;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .mot:hover {
+      background: #42a5f5;
+      transform: scale(1.1);
+    }
+
+    #phraseRecomposee {
+      font-size: 22px;
+      font-weight: bold;
+      color: #0d47a1;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 18px;
+      transition: background 0.3s ease;
     }
+
+    button:hover {
+      background-color: #0d47a1;
+    }
+
     #resultat {
-      margin-top: 30px;
-      font-size: 20px;
+      margin-top: 25px;
+      font-size: 22px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -41,7 +95,7 @@
 
   <script>
     const phrases = [
-  ["Le", "chat", "mange", "une", "souris"],
+      ["Le", "chat", "mange", "une", "souris"],
   ["Je", "vais", "à", "l'école"],
   ["Le", "chien", "aboie", "fort"],
   ["Papa", "lit", "un", "livre"],
@@ -81,7 +135,7 @@
   ["La", "lumière", "brille", "fort"],
   ["Nous", "chantons", "à", "l’école"],
   ["Il", "fait", "nuit", "dehors"]
-];
+    ];
 
     let phraseActuelle = [];
     let melange = [];
@@ -120,17 +174,16 @@
       const resultat = document.getElementById("resultat");
 
       if (tentative === bonne) {
-        resultat.innerText = "🎉 Bravo ! Nouvelle phrase...";
+        resultat.innerText = "🎉 Bravo ! Nouvelle phrase dans 2 secondes...";
         resultat.style.color = "green";
         setTimeout(choisirNouvellePhrase, 2000);
       } else {
-        resultat.innerText = "❌ Mauvaise réponse. Essaie encore...";
+        resultat.innerText = "❌ Mauvaise réponse. Essaie encore !";
         resultat.style.color = "red";
         setTimeout(melangerEtAfficher, 2000);
       }
     }
 
-    // Démarrage
     choisirNouvellePhrase();
   </script>
 
