@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Phrase à remettre en ordre</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e3f2fd;
+      text-align: center;
+      padding-top: 50px;
+    }
+    h1 {
+      color: #0d47a1;
+    }
+    .mots {
+      margin-top: 20px;
+    }
+    .mot {
+      display: inline-block;
+      padding: 10px 15px;
+      margin: 5px;
+      background: #90caf9;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    #resultat {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧩 Remets la phrase en ordre</h1>
+  <div class="mots" id="zoneMots"></div>
+  <p><strong>Ta phrase :</strong> <span id="phraseRecomposee"></span></p>
+  <button onclick="verifier()">Vérifier</button>
+  <div id="resultat"></div>
+
+  <script>
+    const phrases = [
+  ["Le", "chat", "mange", "une", "souris"],
+  ["Je", "vais", "à", "l'école"],
+  ["Le", "chien", "aboie", "fort"],
+  ["Papa", "lit", "un", "livre"],
+  ["Il", "fait", "très", "chaud"],
+  ["Marie", "aime", "les", "pommes"],
+  ["Nous", "jouons", "dans", "le", "jardin"],
+  ["Elle", "dessine", "une", "maison"],
+  ["Le", "soleil", "brille", "dans", "le", "ciel"],
+  ["Les", "oiseaux", "chantent", "le", "matin"],
+  ["Maman", "prépare", "le", "dîner"],
+  ["Il", "a", "une", "belle", "voiture"],
+  ["Le", "bébé", "pleure", "beaucoup"],
+  ["Tom", "a", "perdu", "son", "chapeau"],
+  ["J’aime", "regarder", "la", "télé"],
+  ["Le", "poisson", "nage", "vite"],
+  ["Nous", "mangeons", "des", "gâteaux"],
+  ["Il", "lit", "un", "beau", "livre"],
+  ["Je", "cours", "dans", "la", "cour"],
+  ["Le", "train", "roule", "vite"],
+  ["Le", "canard", "marche", "lentement"],
+  ["Le", "chaton", "joue", "avec", "la", "pelote"],
+  ["Nous", "aimons", "les", "histoires"],
+  ["Je", "colle", "une", "image"],
+  ["Elle", "porte", "un", "chapeau", "rouge"],
+  ["La", "maîtresse", "lit", "un", "conte"],
+  ["Le", "garçon", "court", "vite"],
+  ["Le", "chien", "mord", "le", "ballon"],
+  ["Il", "y", "a", "du", "vent"],
+  ["Je", "plante", "une", "fleur"],
+  ["Papa", "rentre", "du", "travail"],
+  ["Lola", "fait", "du", "vélo"],
+  ["Il", "pleut", "beaucoup", "aujourd’hui"],
+  ["La", "vache", "mange", "de", "l’herbe"],
+  ["Les", "filles", "dansent", "ensemble"],
+  ["Le", "lapin", "court", "dans", "le", "champ"],
+  ["Elle", "met", "sa", "robe", "bleue"],
+  ["La", "lumière", "brille", "fort"],
+  ["Nous", "chantons", "à", "l’école"],
+  ["Il", "fait", "nuit", "dehors"]
+];
+
+    let phraseActuelle = [];
+    let melange = [];
+    let reponse = [];
+
+    function choisirNouvellePhrase() {
+      phraseActuelle = phrases[Math.floor(Math.random() * phrases.length)];
+      melangerEtAfficher();
+    }
+
+    function melangerEtAfficher() {
+      melange = [...phraseActuelle].sort(() => Math.random() - 0.5);
+      reponse = [];
+      document.getElementById("phraseRecomposee").innerText = "";
+      document.getElementById("resultat").innerText = "";
+      document.getElementById("zoneMots").innerHTML = "";
+
+      melange.forEach((mot, index) => {
+        const span = document.createElement("span");
+        span.className = "mot";
+        span.innerText = mot;
+        span.onclick = () => ajouterMot(index, mot, span);
+        document.getElementById("zoneMots").appendChild(span);
+      });
+    }
+
+    function ajouterMot(index, mot, element) {
+      reponse.push(mot);
+      element.style.visibility = "hidden";
+      document.getElementById("phraseRecomposee").innerText = reponse.join(" ");
+    }
+
+    function verifier() {
+      const bonne = phraseActuelle.join(" ");
+      const tentative = reponse.join(" ");
+      const resultat = document.getElementById("resultat");
+
+      if (tentative === bonne) {
+        resultat.innerText = "🎉 Bravo ! Nouvelle phrase...";
+        resultat.style.color = "green";
+        setTimeout(choisirNouvellePhrase, 2000);
+      } else {
+        resultat.innerText = "❌ Mauvaise réponse. Essaie encore...";
+        resultat.style.color = "red";
+        setTimeout(melangerEtAfficher, 2000);
+      }
+    }
+
+    // Démarrage
+    choisirNouvellePhrase();
+  </script>
+
+</body>
+</html>
