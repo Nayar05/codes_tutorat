@@ -1,0 +1,86 @@
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    .section {
+      margin: 20px 0;
+    }
+    input[type=range] {
+      width: 200px;
+    }
+    .fruit-display {
+      font-size: 30px;
+      margin-top: 20px;
+    }
+    #resultat {
+      margin-top: 30px;
+      font-size: 24px;
+    }
+    .app-container {
+      background-color: #fff8dc; /* Vert clair */
+      padding: 30px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+  </style>
+  <h1>🍇🍎 Apprendre à additionner</h1>
+  <div class="app-container">
+    <div class="section">
+      <label for="fruit1">Choisis le premier fruit :</label>
+      <select id="fruit1" fdprocessedid="wng9rp" onchange="majSliders()">
+        <option value="🍎">Pomme 🍎</option>
+        <option value="🍊">Orange 🍊</option>
+        <option value="🍌">Banane 🍌</option>
+        <option value="🍓">Fraise 🍓</option>
+        <option value="🍇">Raisin 🍇</option>
+      </select>
+    </div>
+    <div class="section">
+      <label for="fruit2">Choisis le deuxième fruit :</label>
+      <select id="fruit2" fdprocessedid="6v2ju" onchange="majSliders()">
+        <option value="🍊">Orange 🍊</option>
+        <option value="🍎">Pomme 🍎</option>
+        <option value="🍌">Banane 🍌</option>
+        <option value="🍓">Fraise 🍓</option>
+        <option value="🍇">Raisin 🍇</option>
+      </select>
+    </div>
+    <div class="section">
+      <label for="slider1">Nombre de <span id="labelFruit1">🍎</span> : <span id="valFruit1">0</span></label><br>
+      <input type="range" id="slider1" min="0" max="10" value="0" oninput="majAffichage('slider1', 'valFruit1')">
+    </div>
+    <div class="section">
+      <label for="slider2">Nombre de <span id="labelFruit2">🍊</span> : <span id="valFruit2">0</span></label><br>
+      <input type="range" id="slider2" min="0" max="10" value="0" oninput="majAffichage('slider2', 'valFruit2')">
+    </div>
+    <button fdprocessedid="oyhg49" onclick="additionnerFruits()">Additionner les fruits</button>
+    <div id="resultat"></div>
+  </div>
+  <script>
+    function majSliders() {
+      const fruit1 = document.getElementById("fruit1").value;
+      const fruit2 = document.getElementById("fruit2").value;
+      document.getElementById("labelFruit1").innerText = fruit1;
+      document.getElementById("labelFruit2").innerText = fruit2;
+      additionnerFruits(); // Met à jour l'affichage automatiquement
+    }
+    function majAffichage(sliderId, spanId) {
+      document.getElementById(spanId).innerText = document.getElementById(sliderId).value;
+    }
+    function additionnerFruits() {
+      const fruit1 = document.getElementById("fruit1").value;
+      const fruit2 = document.getElementById("fruit2").value;
+      const nb1 = parseInt(document.getElementById("slider1").value);
+      const nb2 = parseInt(document.getElementById("slider2").value);
+      const total = nb1 + nb2;
+      const affichage = fruit1.repeat(nb1) + " " + fruit2.repeat(nb2);
+      document.getElementById("resultat").innerHTML =
+        `🧮 Total de fruits : ${total}<br><div class="fruit-display">${affichage}</div>`;
+    }
+    // Initialiser les labels au chargement
+    window.onload = majSliders;
+  </script>

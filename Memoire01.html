@@ -1,0 +1,145 @@
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    
+    h1 {
+      font-size: 28px;
+      color: #2c3e50;
+    }
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(5, 70px);
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    .card {
+      width: 70px;
+      height: 70px;
+      background-color: #3498db;
+      color: transparent;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      user-select: none;
+    }
+    .card.flipped {
+      background-color: #f39c12;
+      color: #fff;
+    }
+    .card.matched {
+      background-color: #2ecc71;
+      color: #fff;
+      cursor: default;
+    }
+    #message {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #e67e22;
+    }
+    #replay {
+      display: none;
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #timer {
+      font-size: 20px;
+      margin-top: 15px;
+      color: #34495e;
+    }
+  </style>
+  <h1>Jeu de mémoire 🧠<br>Trouve les paires de chiffres !</h1>
+  <div id="timer">Temps écoulé : 0 s</div>
+  <div class="game-board" id="gameBoard"></div>
+  <div id="message"></div>
+  <button id="replay" fdprocessedid="4rk4a4" onclick="startGame()">Rejouer</button>
+  <script>
+    const board = document.getElementById('gameBoard');
+    const message = document.getElementById('message');
+    const replayBtn = document.getElementById('replay');
+    const timerDisplay = document.getElementById('timer');
+    let values = [];
+    let flippedCards = [];
+    let lockBoard = false;
+    let seconds = 0;
+    let timerInterval;
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+    function startTimer() {
+      seconds = 0;
+      clearInterval(timerInterval);
+      timerDisplay.textContent = `Temps écoulé : 0 s`;
+      timerInterval = setInterval(() => {
+        seconds++;
+        timerDisplay.textContent = `Temps écoulé : ${seconds} s`;
+      }, 1000);
+    }
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
+    function startGame() {
+      board.innerHTML = '';
+      message.textContent = '';
+      replayBtn.style.display = 'none';
+      flippedCards = [];
+      lockBoard = false;
+      values = [];
+      for (let i = 0; i < 10; i++) {
+        values.push(i, i); // deux fois chaque chiffre
+      }
+      values = shuffle(values);
+      values.forEach((val) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.value = val;
+        card.textContent = val;
+        card.addEventListener('click', () => flipCard(card));
+        board.appendChild(card);
+      });
+      startTimer();
+    }
+    function flipCard(card) {
+      if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+      card.classList.add('flipped');
+      flippedCards.push(card);
+      if (flippedCards.length === 2) {
+        lockBoard = true;
+        setTimeout(checkMatch, 700);
+      }
+    }
+    function checkMatch() {
+      const [card1, card2] = flippedCards;
+      if (card1.dataset.value === card2.dataset.value) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+      } else {
+        card1.classList.remove('flipped');
+        card2.classList.remove('flipped');
+      }
+      flippedCards = [];
+      lockBoard = false;
+      if (document.querySelectorAll('.card.matched').length === values.length) {
+        stopTimer();
+        message.textContent = `Bravo ! Toutes les paires sont trouvées 🎉\nTemps : ${seconds} secondes`;
+        replayBtn.style.display = 'inline-block';
+      }
+    }
+    startGame();
+  </script>

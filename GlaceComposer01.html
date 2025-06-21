@@ -1,0 +1,230 @@
+
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(to bottom, #ffffff, #ffffff);
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #d81b60;
+      margin-top: 30px;
+      font-size: 2em;
+      text-shadow: 1px 1px 2px #fff;
+    }
+    #cone-wrapper {
+      position: relative;
+      width: 160px;
+      height: 350px;
+      margin: 30px auto;
+    }
+    #cone {
+      width: 100px;
+      height: 140px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #e0a96d,
+        #e0a96d 10px,
+        #d8945c 10px,
+        #d8945c 20px
+      );
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+      position: absolute;
+      bottom: 0;
+      left: 30px;
+      z-index: 1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .scoop {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      position: absolute;
+      border: 3px solid #fff;
+      box-shadow: inset -2px -2px 5px rgba(0,0,0,0.1),
+                  3px 3px 7px rgba(0,0,0,0.15);
+      animation: bounceIn 0.6s ease;
+      opacity: 0;
+      animation-fill-mode: forwards;
+      z-index: 2;
+    }
+    @keyframes bounceIn {
+      0% {
+        transform: translateY(40px) scale(0.5);
+        opacity: 0;
+      }
+      70% {
+        transform: translateY(-10px) scale(1.1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+    #game {
+      margin-top: 20px;
+    }
+    input {
+      padding: 10px;
+      font-size: 18px;
+      width: 100px;
+      border: 2px solid #d81b60;
+      border-radius: 10px;
+      outline: none;
+      margin-right: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #d81b60;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ad1457;
+    }
+    .message {
+      font-size: 20px;
+      color: #4caf50;
+      margin-top: 10px;
+    }
+    #victoryModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border: 5px solid #d81b60;
+      padding: 30px;
+      width: 90%;
+      max-width: 350px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      z-index: 9999;
+      animation: popIn 0.5s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5) translate(-50%, -50%); opacity: 0; }
+      to { transform: scale(1) translate(-50%, -50%); opacity: 1; }
+    }
+    #victoryModal h2 {
+      color: #d81b60;
+      margin-bottom: 10px;
+    }
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      z-index: 9998;
+    }
+    #restartBtn {
+      margin-top: 15px;
+      background-color: #4caf50;
+    }
+  </style>
+  <h1>🍦 Glace à composer ! 🍦</h1>
+  
+  <div id="cone-wrapper">
+    <div id="cone"></div>
+  </div>
+  <div id="game">
+    <p id="question"></p>
+    <input type="number" id="answer" placeholder="Réponse" fdprocessedid="houg1q">
+    <button fdprocessedid="0c99gu" onclick="checkAnswer()">Valider</button>
+    <div class="message" id="message"></div>
+  </div>
+  <div id="overlay"></div>
+  <div id="victoryModal">
+    <h2>🎉 Bravo !</h2>
+    <p>Ta glace est magnifique et complète ! 🍒</p>
+    <button id="restartBtn" fdprocessedid="u06l1" onclick="resetGame()">Recommencer</button>
+  </div>
+  <script>
+    const colors = [
+      "linear-gradient(to bottom, #ff9a9e, #fad0c4)",
+      "linear-gradient(to bottom, #a1c4fd, #c2e9fb)",
+      "linear-gradient(to bottom, #fbc2eb, #a6c1ee)",
+      "linear-gradient(to bottom, #d4fc79, #96e6a1)",
+      "linear-gradient(to bottom, #ffecd2, #fcb69f)"
+    ];
+    let scoops = 0;
+    let correctAnswer = 0;
+    let gameActive = true;
+    function generateQuestion() {
+      const a = Math.floor(Math.random() * 30) + 20;
+      const b = Math.floor(Math.random() * 30) + 20;
+      correctAnswer = a + b;
+      document.getElementById("question").innerText = `Combien fait ${a} + ${b} ?`;
+      document.getElementById("answer").value = "";
+      document.getElementById("message").innerText = "";
+    }
+    function addScoop() {
+      const scoop = document.createElement("div");
+      scoop.className = "scoop";
+      scoop.style.background = colors[scoops % colors.length];
+      // Positionnement des 5 boules
+      switch (scoops) {
+        case 0:
+          scoop.style.bottom = "140px";
+          scoop.style.left = "10px";
+          break;
+        case 1:
+          scoop.style.bottom = "140px";
+          scoop.style.left = "85px";
+          break;
+        case 2:
+          scoop.style.bottom = "210px";
+          scoop.style.left = "10px";
+          break;
+        case 3:
+          scoop.style.bottom = "210px";
+          scoop.style.left = "85px";
+          break;
+        case 4:
+          scoop.style.bottom = "280px";
+          scoop.style.left = "48px";
+          break;
+      }
+      document.getElementById("cone-wrapper").appendChild(scoop);
+      scoops++;
+      if (scoops === 5) {
+        gameActive = false;
+        setTimeout(() => {
+          document.getElementById("overlay").style.display = "block";
+          document.getElementById("victoryModal").style.display = "block";
+        }, 800);
+      }
+    }
+    function checkAnswer() {
+      if (!gameActive) return;
+      const userAnswer = parseInt(document.getElementById("answer").value);
+      if (userAnswer === correctAnswer) {
+        addScoop();
+        if (gameActive) generateQuestion();
+      } else {
+        document.getElementById("message").innerText = "Essaie encore 😅";
+      }
+    }
+    function resetGame() {
+      const wrapper = document.getElementById("cone-wrapper");
+      document.querySelectorAll(".scoop").forEach(scoop => wrapper.removeChild(scoop));
+      scoops = 0;
+      gameActive = true;
+      document.getElementById("victoryModal").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      generateQuestion();
+    }
+    generateQuestion();
+  </script>
